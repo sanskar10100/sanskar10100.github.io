@@ -192,7 +192,7 @@ p {
 a {
     color: var(--white);
     font-weight: 400;
-    font-family: 'Jost', sans-serif;
+    /* font-family: 'Jost', sans-serif; */
     transition: all .2s;
     /* outline: 2px solid transparent; */
 }
@@ -251,6 +251,7 @@ body:not(.user-is-tabbing) a:focus {
 .btn--pink {
     background: var(--pink);
     transition: all 0.2s;
+	border-radius: 50px;
 }
 
 .btn--pink::after {
