@@ -2,7 +2,9 @@
 /* ----- Basic Setup ----- */
 /* --------------------------------------- */
 
-@font-face {
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
+
+/* @font-face {
     font-family: 'Hk Grotesk';
     font-style: normal;
     font-weight: 400;
@@ -14,7 +16,7 @@
     font-style: normal;
     font-weight: 400;
     src: url('./fonts/Jost-Regular.ttf') format('woff');
-}
+} */
 
 * {
     margin: 0;
