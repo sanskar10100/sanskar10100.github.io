@@ -418,13 +418,14 @@ body:not(.user-is-tabbing) a:focus {
 .header__text {
     position: absolute;
     top: 50%;
+	left: 5%;
+	right:5%;
     transform: translateY(-50%);
 }
 
 .header__text p {
     margin: 1.5rem 0 3.5rem;
     max-width: var(--container-medium-width);
-    font-family: 'Jost', sans-serif;
     font-size: var(--font-size-medium);
 }
 
