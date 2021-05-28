@@ -224,13 +224,13 @@ body:not(.user-is-tabbing) a:focus {
     padding: 1rem 4.2rem;
     text-decoration: none;
     color: inherit;
-    border-bottom: 1px solid  var(--pink);
-    border-left: 1px solid  var(--pink);
     font-weight: 400;
 }
 
 .btn-design {
 	padding: 1rem 0.5rem;
+	border-bottom: 1px solid  var(--pink);
+    border-left: 1px solid  var(--pink);
 }
 
 .btn:focus {
