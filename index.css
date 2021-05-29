@@ -526,7 +526,7 @@ body:not(.user-is-tabbing) a:focus {
 	opacity: 1;
 }
 
-.work__code {
+/* .work__code {
     display: block;
     height: 3rem;
     margin-left: var(--gutter-normal);
@@ -540,7 +540,7 @@ body:not(.user-is-tabbing) a:focus {
 .work__image-box {
     margin-bottom: var(--gutter-normal);
 	border: 2px solid magenta;
-}
+} */
 
 @media(min-width: 901px) {
     .work__image-box {
@@ -583,6 +583,49 @@ body:not(.user-is-tabbing) a:focus {
 /* --------------------------------------- */
 /* ----- About ----- */
 /* --------------------------------------- */
+
+/* ---------------------------------------- */
+/* -------SKILLS------ */
+/* --------------------------------------- */
+.chips {
+	display: flex;
+	margin: 0rem 6%;
+
+	flex-direction: column;
+}
+.chip {
+	display: inline-block;
+	position: relative;
+	/* border: 2px solid red; */
+	margin: 1rem 0px;
+	width: 13%;
+	height: 40px;
+	font-size: 16px;
+	border-radius: 25px;
+	z-index: 1;
+
+}
+
+.chip img {
+	margin: 0px 10px 0px 4px;
+	height: 40px;
+	width: 40px;
+	border-radius: 50%;
+}
+
+.chip .chip-content {
+	color: whitesmoke;
+	position: absolute;
+	top: 5px;
+	left: 60px;
+	opacity: 1;
+	z-index: 2;
+}
+
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
 
 .about__content {
     display: flex;
