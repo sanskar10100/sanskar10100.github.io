@@ -589,7 +589,7 @@ body:not(.user-is-tabbing) a:focus {
 /* --------------------------------------- */
 .chips {
 	display: flex;
-	margin: 0rem 6%;
+	margin: 0rem 7%;
 
 	flex-direction: column;
 }
@@ -607,7 +607,6 @@ body:not(.user-is-tabbing) a:focus {
 }
 
 .chip img {
-	margin: 0px 10px 0px 4px;
 	height: 40px;
 	width: 40px;
 	border-radius: 50%;
