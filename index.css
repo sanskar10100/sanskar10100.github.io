@@ -4,20 +4,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
 
-/* @font-face {
-    font-family: 'Hk Grotesk';
-    font-style: normal;
-    font-weight: 400;
-    src: url('./fonts/HKGrotesk-Regular.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Jost';
-    font-style: normal;
-    font-weight: 400;
-    src: url('./fonts/Jost-Regular.ttf') format('woff');
-} */
-
 * {
     margin: 0;
     padding: 0;
@@ -524,23 +510,7 @@ body:not(.user-is-tabbing) a:focus {
 
 .img-container:hover .img-content {
 	opacity: 1;
-}
-
-/* .work__code {
-    display: block;
-    height: 3rem;
-    margin-left: var(--gutter-normal);
-    transition: all .3s;
-}
-
-.work__code:hover {
-    transform: scale(1.2);
-}
-
-.work__image-box {
-    margin-bottom: var(--gutter-normal);
-	border: 2px solid magenta;
-} */
+}	
 
 @media(min-width: 901px) {
     .work__image-box {
