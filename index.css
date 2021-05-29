@@ -525,46 +525,6 @@ body:not(.user-is-tabbing) a:focus {
 .img-container:hover .img-content {
 	opacity: 1;
 }
-/* .work__box {
-    display: flex;
-    align-items: center;
-	border: 2px solid blue;
-
-}
-
-@media(max-width: 700px) {
-    .work__box {
-        align-items: initial;
-        flex-direction: column-reverse;
-    }
-}
-
-.work__box:not(:last-child) {
-    margin-bottom: 25rem;
-}
-
-@media(max-width: 500px) {
-    .work__box:not(:last-child) {
-        margin-bottom: 20rem;
-    }
-}
-
-.work__links {
-    display: flex;
-    align-items: center;
-}
-
-.work__text {
-    flex: 0 0 30%;
-	border: 2px solid red;
-}
-
-.work__list {
-    /* list-style-type: square; */
-    list-style-position: inside;
-    margin-bottom: var(--gutter-normal);
-	border: 2px solid green;
-}
 
 .work__code {
     display: block;
