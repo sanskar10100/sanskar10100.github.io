@@ -2,7 +2,9 @@
 /* ----- Basic Setup ----- */
 /* --------------------------------------- */
 
-@font-face {
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
+
+/* @font-face {
     font-family: 'Hk Grotesk';
     font-style: normal;
     font-weight: 400;
@@ -14,7 +16,7 @@
     font-style: normal;
     font-weight: 400;
     src: url('./fonts/Jost-Regular.ttf') format('woff');
-}
+} */
 
 * {
     margin: 0;
@@ -70,9 +72,11 @@ body {
     font-size: var(--font-size-small);
     font-family: var(--font-stack);
     font-weight: 400;
-    color: var(--white-1);
+    /* color: var(--white-1); */
+	color: #dde4ea;
     line-height: var(--line-height-normal);
-    background: var(--black);
+    /* background: var(--black); */
+	background-color: #111111;
     overflow-x: hidden;
 }
 
@@ -125,7 +129,8 @@ h3 {
     font-family: 'Jost', sans-serif;
     font-weight: 400;
     line-height: var(--line-height-small);
-    color: var(--white);
+    /* color: var(--white); */
+	color: #FFFFFF;
 }
 
 .heading-primary {
@@ -190,9 +195,9 @@ p {
 a {
     color: var(--white);
     font-weight: 400;
-    font-family: 'Jost', sans-serif;
+    /* font-family: 'Jost', sans-serif; */
     transition: all .2s;
-    outline: 2px solid transparent;
+    /* outline: 2px solid transparent; */
 }
 
 ::-moz-focus-inner {
@@ -219,8 +224,13 @@ body:not(.user-is-tabbing) a:focus {
     padding: 1rem 4.2rem;
     text-decoration: none;
     color: inherit;
-    border: 1px solid  var(--pink);
     font-weight: 400;
+}
+
+.btn-design {
+	padding: 1rem 0.5rem;
+	border-bottom: 1px solid  var(--pink);
+    border-left: 1px solid  var(--pink);
 }
 
 .btn:focus {
@@ -249,6 +259,7 @@ body:not(.user-is-tabbing) a:focus {
 .btn--pink {
     background: var(--pink);
     transition: all 0.2s;
+	border-radius: 50px;
 }
 
 .btn--pink::after {
@@ -416,13 +427,14 @@ body:not(.user-is-tabbing) a:focus {
 .header__text {
     position: absolute;
     top: 50%;
+	left: 5%;
+	right:5%;
     transform: translateY(-50%);
 }
 
 .header__text p {
     margin: 1.5rem 0 3.5rem;
     max-width: var(--container-medium-width);
-    font-family: 'Jost', sans-serif;
     font-size: var(--font-size-medium);
 }
 
@@ -439,13 +451,88 @@ body:not(.user-is-tabbing) a:focus {
 /* --------------------------------------- */
 /* ----- Work ----- */
 /* --------------------------------------- */
-
-.work__box {
-    display: flex;
-    align-items: center;
+.work__boxes {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	margin: auto;
+	align-content: flex-start;
 }
 
-@media(max-width: 900px) {
+.work__boxes img {
+	display: block;
+	width: 100%;
+	object-fit: cover;
+	object-position: center;
+	max-height: 600px;
+	
+}
+
+.img-container {
+	margin: 1rem 1rem;
+	position: relative;
+}
+
+.img-content {
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	transition: all 0.3s ease-in-out;
+	opacity: 0;
+	z-index: 2;
+}
+
+.img-content h3 {
+	font-size: 3rem;
+	text-align: center;
+}
+
+.img-btn {
+	justify-content: center;
+	display: block;
+	width: 70%;
+	margin: auto;
+}
+
+.img-content p {
+	font-weight: 400;
+	margin: 2rem 2rem;
+}
+
+.img-container::after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.950);
+	opacity: 0;
+	z-index: 1;
+	transform: scaleY(0);
+	transform-origin: 50% 50%;
+	transition: all 0.3s ease-in-out;
+}
+
+.img-container:hover::after{
+	opacity: 1;
+	transform:scaleY(1)
+}
+
+.img-container:hover .img-content {
+	opacity: 1;
+}
+/* .work__box {
+    display: flex;
+    align-items: center;
+	border: 2px solid blue;
+
+}
+
+@media(max-width: 700px) {
     .work__box {
         align-items: initial;
         flex-direction: column-reverse;
@@ -469,12 +556,14 @@ body:not(.user-is-tabbing) a:focus {
 
 .work__text {
     flex: 0 0 30%;
+	border: 2px solid red;
 }
 
 .work__list {
     /* list-style-type: square; */
     list-style-position: inside;
     margin-bottom: var(--gutter-normal);
+	border: 2px solid green;
 }
 
 .work__code {
@@ -490,6 +579,7 @@ body:not(.user-is-tabbing) a:focus {
 
 .work__image-box {
     margin-bottom: var(--gutter-normal);
+	border: 2px solid magenta;
 }
 
 @media(min-width: 901px) {
@@ -503,7 +593,7 @@ body:not(.user-is-tabbing) a:focus {
     .work__code {
         height: 4rem;
     }
-}
+} */
 
 /* --------------------------------------- */
 /* ----- Clients ----- */
