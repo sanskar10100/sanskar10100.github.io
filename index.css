@@ -559,12 +559,13 @@ body:not(.user-is-tabbing) a:focus {
 /* --------------------------------------- */
 .chips {
 	display: flex;
-	margin: 0rem 7%;
+	max-width: 1100px;
+	padding: 0 6rem;
+	margin: 0rem auto;
 	/* border: 2px solid green; */
 	/* flex-direction: ; */
 	justify-content: left;
 	flex-wrap: wrap;
-	justify-items: ;
 }
 .chip {
 	display: inline-block;
