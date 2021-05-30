@@ -560,17 +560,22 @@ body:not(.user-is-tabbing) a:focus {
 .chips {
 	display: flex;
 	margin: 0rem 7%;
-
-	flex-direction: column;
+	/* border: 2px solid green; */
+	/* flex-direction: ; */
+	justify-content: left;
+	flex-wrap: wrap;
+	justify-items: ;
 }
 .chip {
 	display: inline-block;
 	position: relative;
-	/* border: 2px solid red; */
-	margin: 1rem 0px;
-	width: 13%;
+	/* border-right: 1px solid whitesmoke; */
+	/* border-top-width: thick; */
+	/* border-top: 0px solid whitesmoke; */
+	margin: 1rem 0.5rem;
+	width: 180px;
 	height: 40px;
-	font-size: 16px;
+	/* font-size: 16px; */
 	border-radius: 25px;
 	z-index: 1;
 
@@ -586,7 +591,7 @@ body:not(.user-is-tabbing) a:focus {
 	color: whitesmoke;
 	position: absolute;
 	top: 5px;
-	left: 60px;
+	left: 30%;
 	opacity: 1;
 	z-index: 2;
 }
