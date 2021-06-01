@@ -4,20 +4,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
 
-/* @font-face {
-    font-family: 'Hk Grotesk';
-    font-style: normal;
-    font-weight: 400;
-    src: url('./fonts/HKGrotesk-Regular.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Jost';
-    font-style: normal;
-    font-weight: 400;
-    src: url('./fonts/Jost-Regular.ttf') format('woff');
-} */
-
 * {
     margin: 0;
     padding: 0;
@@ -524,63 +510,7 @@ body:not(.user-is-tabbing) a:focus {
 
 .img-container:hover .img-content {
 	opacity: 1;
-}
-/* .work__box {
-    display: flex;
-    align-items: center;
-	border: 2px solid blue;
-
-}
-
-@media(max-width: 700px) {
-    .work__box {
-        align-items: initial;
-        flex-direction: column-reverse;
-    }
-}
-
-.work__box:not(:last-child) {
-    margin-bottom: 25rem;
-}
-
-@media(max-width: 500px) {
-    .work__box:not(:last-child) {
-        margin-bottom: 20rem;
-    }
-}
-
-.work__links {
-    display: flex;
-    align-items: center;
-}
-
-.work__text {
-    flex: 0 0 30%;
-	border: 2px solid red;
-}
-
-.work__list {
-    /* list-style-type: square; */
-    list-style-position: inside;
-    margin-bottom: var(--gutter-normal);
-	border: 2px solid green;
-}
-
-.work__code {
-    display: block;
-    height: 3rem;
-    margin-left: var(--gutter-normal);
-    transition: all .3s;
-}
-
-.work__code:hover {
-    transform: scale(1.2);
-}
-
-.work__image-box {
-    margin-bottom: var(--gutter-normal);
-	border: 2px solid magenta;
-}
+}	
 
 @media(min-width: 901px) {
     .work__image-box {
@@ -623,6 +553,54 @@ body:not(.user-is-tabbing) a:focus {
 /* --------------------------------------- */
 /* ----- About ----- */
 /* --------------------------------------- */
+
+/* ---------------------------------------- */
+/* -------SKILLS------ */
+/* --------------------------------------- */
+.chips {
+	display: flex;
+	max-width: 1100px;
+	padding: 0 6rem;
+	margin: 0rem auto;
+	/* border: 2px solid green; */
+	/* flex-direction: ; */
+	justify-content: left;
+	flex-wrap: wrap;
+}
+.chip {
+	display: inline-block;
+	position: relative;
+	/* border-right: 1px solid whitesmoke; */
+	/* border-top-width: thick; */
+	/* border-top: 0px solid whitesmoke; */
+	margin: 1rem 0.5rem;
+	width: 180px;
+	height: 40px;
+	/* font-size: 16px; */
+	border-radius: 25px;
+	z-index: 1;
+
+}
+
+.chip img {
+	height: 40px;
+	width: 40px;
+	border-radius: 50%;
+}
+
+.chip .chip-content {
+	color: whitesmoke;
+	position: absolute;
+	top: 5px;
+	left: 30%;
+	opacity: 1;
+	z-index: 2;
+}
+
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
 
 .about__content {
     display: flex;
