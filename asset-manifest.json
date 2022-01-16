@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.d276d4c9.chunk.css",
-    "main.js": "/static/js/main.b1384ce7.chunk.js",
-    "main.js.map": "/static/js/main.b1384ce7.chunk.js.map",
+    "main.js": "/static/js/main.d3dd6d23.chunk.js",
+    "main.js.map": "/static/js/main.d3dd6d23.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.11e15922.js",
     "runtime-main.js.map": "/static/js/runtime-main.11e15922.js.map",
     "static/css/2.19627560.chunk.css": "/static/css/2.19627560.chunk.css",
@@ -61,7 +61,7 @@
     "static/media/eduPurple.0d11a0cf.svg": "/static/media/eduPurple.0d11a0cf.svg",
     "static/media/eduRed.55e01742.svg": "/static/media/eduRed.55e01742.svg",
     "static/media/eduYellow.6b8f8b23.svg": "/static/media/eduYellow.6b8f8b23.svg",
-    "static/media/eight.98202b95.svg": "/static/media/eight.98202b95.svg",
+    "static/media/eight.62e7bb57.png": "/static/media/eight.62e7bb57.png",
     "static/media/expBlack.777d4bba.svg": "/static/media/expBlack.777d4bba.svg",
     "static/media/expBlue.159c6388.svg": "/static/media/expBlue.159c6388.svg",
     "static/media/expGreen.dffa1cc6.svg": "/static/media/expGreen.dffa1cc6.svg",
@@ -75,7 +75,7 @@
     "static/media/fastify.1b930a41.svg": "/static/media/fastify.1b930a41.svg",
     "static/media/figma.1cd44608.svg": "/static/media/figma.1cd44608.svg",
     "static/media/firebase.99786447.svg": "/static/media/firebase.99786447.svg",
-    "static/media/five.89b924eb.svg": "/static/media/five.89b924eb.svg",
+    "static/media/five.e84dfa92.png": "/static/media/five.e84dfa92.png",
     "static/media/flutter.643a93c8.svg": "/static/media/flutter.643a93c8.svg",
     "static/media/four.f53c8093.png": "/static/media/four.f53c8093.png",
     "static/media/gcp.1b20e46e.svg": "/static/media/gcp.1b20e46e.svg",
@@ -132,8 +132,8 @@
     "static/media/resume.94fcb1f7.pdf": "/static/media/resume.94fcb1f7.pdf",
     "static/media/ruby.34e792ab.svg": "/static/media/ruby.34e792ab.svg",
     "static/media/selenium.7dcf1c14.svg": "/static/media/selenium.7dcf1c14.svg",
-    "static/media/seven.3168c0a5.svg": "/static/media/seven.3168c0a5.svg",
-    "static/media/six.bd765919.svg": "/static/media/six.bd765919.svg",
+    "static/media/seven.61748b25.png": "/static/media/seven.61748b25.png",
+    "static/media/six.955b8b85.png": "/static/media/six.955b8b85.png",
     "static/media/sketch.87c83552.svg": "/static/media/sketch.87c83552.svg",
     "static/media/slick-theme.css": "/static/media/slick.c94f7671.ttf",
     "static/media/strapi.ac0a6e67.svg": "/static/media/strapi.ac0a6e67.svg",
@@ -159,6 +159,6 @@
     "static/css/2.19627560.chunk.css",
     "static/js/2.d5eb379e.chunk.js",
     "static/css/main.d276d4c9.chunk.css",
-    "static/js/main.b1384ce7.chunk.js"
+    "static/js/main.d3dd6d23.chunk.js"
   ]
 }
