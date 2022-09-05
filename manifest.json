@@ -1,0 +1,11 @@
+{
+    "short_name": "Sanskar Agrawal's Website",
+    "name": "Sanskar Agrawal's Website",
+    "icons": [
+        {
+            "src": "favicon.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ]
+}
