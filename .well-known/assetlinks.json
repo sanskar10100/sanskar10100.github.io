@@ -12,5 +12,19 @@
         "CF:2A:5C:AF:48:B9:BA:04:F4:17:76:A6:23:60:DC:14:A3:E8:F0:79:00:74:36:06:2E:84:C7:8A:81:92:2F:24"
       ]
     }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "dev.sanskar.panel",
+      "sha256_cert_fingerprints": [
+        "FB:60:31:41:2F:95:95:8C:BF:8B:31:7F:DB:43:5C:F7:94:C8:16:50:6C:C4:4F:22:06:42:96:07:0F:A9:9B:17",
+        "0C:3D:B0:AE:45:D6:86:A4:DD:21:B8:07:B5:77:91:D3:60:7E:85:93:48:12:9E:3C:3F:A2:CA:AF:46:96:6F:21",
+        "CF:2A:5C:AF:48:B9:BA:04:F4:17:76:A6:23:60:DC:14:A3:E8:F0:79:00:74:36:06:2E:84:C7:8A:81:92:2F:24"
+      ]
+    }
   }
 ]
