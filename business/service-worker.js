@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.f91d2c1165703e28810f60dfe95e644b.js"
+  "/business/precache-manifest.966f207853c59d4f5689305a9327ed5a.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "game-pay"});
