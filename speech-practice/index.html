@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speech Practice</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #fdf6ec; color: #333; margin: 0; padding: 24px; }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  h1 { color: #e46b2e; }
+  textarea { width: 100%; height: 220px; font-size: 18px; padding: 12px; border-radius: 12px; border: 2px solid #ddd; box-sizing: border-box; }
+  button { font-size: 20px; padding: 12px 20px; border-radius: 14px; border: none; background: #4a90e2; color: white; cursor: pointer; margin: 4px; }
+  button:disabled { opacity: .4; cursor: default; }
+  button.big { background: #e46b2e; font-size: 24px; }
+  button.mic { background: #2fa36b; }
+  button.mic.on { background: #c0392b; }
+  .row { margin: 12px 0; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; font-size: 18px; }
+  select { font-size: 18px; }
+  .top { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; font-size: 18px; }
+  .top button { font-size: 16px; padding: 8px 12px; background: #888; }
+  #progress { font-weight: bold; color: #e46b2e; }
+  #sentence { font-size: 40px; line-height: 1.6; background: white; border-radius: 20px; padding: 32px; margin: 24px 0; min-height: 120px; box-shadow: 0 4px 12px rgba(0,0,0,.08); }
+  .w { display: inline-block; margin: 0 6px; padding: 0 4px; border-radius: 8px; transition: all .2s; cursor: pointer; }
+  .w.reading { background: #ffe08a; }
+  .w.ok { color: #1e8c4e; background: #d9f5e3; }
+  .w.hidden { color: transparent; border-bottom: 4px solid #bbb; border-radius: 0; }
+  #status { font-size: 26px; min-height: 36px; text-align: center; }
+  #heard { font-size: 16px; color: #888; min-height: 24px; text-align: center; margin-top: 8px; font-style: italic; }
+  .controls { text-align: center; margin-top: 20px; }
+  #warn { color: #c0392b; font-size: 18px; }
+  .done { text-align: center; font-size: 32px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div id="setup">
+  <h1>🎤 Speech Practice</h1>
+  <p>Paste the speech below. It is split into sentences: you hear each one, then say it back.</p>
+  <textarea id="para" placeholder="Paste the speech here..."></textarea>
+  <div class="row">
+    <label>Language
+      <select id="lang">
+        <option value="en-IN">English (India)</option>
+        <option value="en-US">English (US)</option>
+        <option value="en-GB">English (UK)</option>
+        <option value="hi-IN">Hindi</option>
+      </select>
+    </label>
+  </div>
+  <button class="big" id="start">Start practising ▶</button>
+  <p id="warn"></p>
+</div>
+
+<div id="practice" hidden>
+  <div class="top">
+    <button id="edit">✎ Edit speech</button>
+    <span id="progress"></span>
+    <label><input type="checkbox" id="memory"> Memory mode (hide words)</label>
+    <label>Voice speed <input type="range" id="rate" min="0.5" max="1.2" step="0.1" value="0.85"></label>
+  </div>
+  <div id="sentence"></div>
+  <div id="status"></div>
+  <div id="heard"></div>
+  <div class="controls">
+    <button id="prev">◀ Back</button>
+    <button id="listen">🔊 Listen</button>
+    <button id="speak" class="mic">🎤 My turn</button>
+    <button id="hint">💡 Hint</button>
+    <button id="next">Next ▶</button>
+  </div>
+</div>
+
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+let sentences = [], idx = 0;
+let words = [], keys = [], offsets = [], matched = [];
+let rec = null, listening = false, manualStop = false, advanceTimer = null;
+
+const norm = w => w.toLowerCase().normalize('NFC').replace(/[^\p{L}\p{M}\p{N}]/gu, '');
+const lang = () => $('lang').value;
+const isDone = () => matched.every(Boolean);
+
+function splitSentences(text) {
+  text = text.replace(/\s+/g, ' ').trim();
+  return (text.match(/[^.!?।]+[.!?।]+["'”’)]*|[^.!?।]+$/g) || []).map(s => s.trim()).filter(Boolean);
+}
+
+function lev(a, b) {
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++)
+    for (let j = 1; j <= b.length; j++)
+      d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+  return d[a.length][b.length];
+}
+
+function similar(a, b) {
+  if (a === b) return true;
+  if (a.length > 3 && lev(a, b) <= 1) return true;
+  if (a.length > 6 && lev(a, b) <= 2) return true;
+  return false;
+}
+
+// ---------- sentence display ----------
+function loadSentence(i) {
+  clearTimeout(advanceTimer);
+  stopListening();
+  speechSynthesis.cancel();
+  idx = i;
+  const s = sentences[idx];
+  words = s.split(' ');
+  keys = words.map(norm);
+  offsets = [];
+  let pos = 0;
+  for (const w of words) { offsets.push(pos); pos += w.length + 1; }
+  matched = keys.map(k => k === '');   // bare punctuation counts as already said
+  $('heard').textContent = '';
+  $('progress').textContent = `Sentence ${idx + 1} of ${sentences.length}`;
+  $('prev').disabled = idx === 0;
+  $('next').disabled = idx === sentences.length - 1;
+  render();
+  playSentence();
+}
+
+function render(readingIdx = -1) {
+  const memory = $('memory').checked;
+  $('sentence').innerHTML = '';
+  words.forEach((w, i) => {
+    const span = document.createElement('span');
+    span.className = 'w' + (matched[i] ? ' ok' : '') + (i === readingIdx ? ' reading' : '')
+      + (memory && !matched[i] && i !== readingIdx ? ' hidden' : '');
+    span.textContent = w;
+    span.title = 'Click to mark as said';
+    span.onclick = () => { matched[i] = true; if (rec) base[i] = true; render(); if (isDone()) success(); };
+    $('sentence').appendChild(span);
+  });
+}
+
+function status(t) { $('status').textContent = t; }
+
+// ---------- text to speech ----------
+function pickVoice() {
+  const voices = speechSynthesis.getVoices();
+  return voices.find(v => v.lang.replace('_', '-') === lang())
+      || voices.find(v => v.lang.startsWith(lang().slice(0, 2)));
+}
+
+function speak(text, onDone, highlight = false) {
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang();
+  u.rate = parseFloat($('rate').value);
+  const v = pickVoice(); if (v) u.voice = v;
+  if (highlight) {
+    u.onboundary = e => {
+      if (e.name !== 'word') return;
+      let wi = 0;
+      while (wi + 1 < offsets.length && offsets[wi + 1] <= e.charIndex) wi++;
+      render(wi);
+    };
+  }
+  u.onend = () => { render(); onDone && onDone(); };
+  speechSynthesis.speak(u);
+}
+
+function playSentence() {
+  stopListening();
+  status('👂 Listen...');
+  speak(sentences[idx], () => startListening(), true);
+}
+
+// ---------- speech recognition ----------
+let base = [];
+
+function align(transcript) {
+  const heard = transcript.split(/\s+/).map(norm).filter(Boolean);
+  matched = base.slice();
+  let p = matched.indexOf(false);
+  if (p < 0) return;
+  for (let h = 0; h < heard.length && p < keys.length; h++) {
+    for (let k = p; k < Math.min(p + 4, keys.length); k++) {
+      if (similar(keys[k], heard[h])) {
+        matched[k] = true; p = k + 1; break;
+      }
+      // "every one" vs "everyone"
+      if (k + 1 < keys.length && keys[k] + keys[k + 1] === heard[h]) {
+        matched[k] = matched[k + 1] = true; p = k + 2; break;
+      }
+      if (h + 1 < heard.length && heard[h] + heard[h + 1] === keys[k]) {
+        matched[k] = true; p = k + 1; h++; break;
+      }
+    }
+    while (p < keys.length && matched[p]) p++;
+  }
+}
+
+function startListening() {
+  if (!SR) { status('Speech recognition needs Google Chrome or Microsoft Edge'); return; }
+  stopListening();
+  if (isDone()) { matched = keys.map(k => k === ''); render(); }
+  base = matched.slice();
+  manualStop = false;
+  rec = new SR();
+  rec.lang = lang();
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.onresult = e => {
+    let all = '';
+    for (let i = 0; i < e.results.length; i++) all += e.results[i][0].transcript + ' ';
+    $('heard').textContent = 'I heard: ' + all.trim();
+    align(all);
+    render();
+    if (isDone()) success();
+  };
+  rec.onerror = e => {
+    if (e.error === 'not-allowed') status('🚫 Microphone is blocked. Allow mic access and try again.');
+    else if (e.error !== 'no-speech' && e.error !== 'aborted') status('Mic problem: ' + e.error);
+  };
+  rec.onend = () => {
+    listening = false; rec = null; updateMic();
+    if (!manualStop && !isDone()) status('Press 🎤 My turn to try again, or 💡 Hint for help');
+  };
+  rec.start();
+  listening = true; updateMic();
+  status('🎤 Your turn! Say it out loud');
+}
+
+function stopListening() {
+  if (rec) { manualStop = true; rec.abort(); rec = null; }
+  listening = false; updateMic();
+}
+
+function updateMic() {
+  $('speak').classList.toggle('on', listening);
+  $('speak').textContent = listening ? '⏹ Stop' : '🎤 My turn';
+}
+
+function success() {
+  stopListening();
+  if (idx < sentences.length - 1) {
+    status('🎉 Great job!');
+    advanceTimer = setTimeout(() => loadSentence(idx + 1), 1800);
+  } else {
+    status('');
+    $('sentence').innerHTML = '<div class="done">🌟 You finished the whole speech! 🌟<br><br>' +
+      '<button class="big" onclick="restart(true)">Again in Memory mode</button> ' +
+      '<button onclick="restart(false)">Again with words</button></div>';
+  }
+}
+
+function restart(memory) {
+  $('memory').checked = memory;
+  loadSentence(0);
+}
+
+// ---------- buttons ----------
+$('start').onclick = () => {
+  sentences = splitSentences($('para').value);
+  if (!sentences.length) { $('warn').textContent = 'Paste the speech first.'; return; }
+  localStorage.setItem('speech-para', $('para').value);
+  localStorage.setItem('speech-lang', lang());
+  $('setup').hidden = true;
+  $('practice').hidden = false;
+  loadSentence(0);
+};
+$('edit').onclick = () => { stopListening(); speechSynthesis.cancel(); clearTimeout(advanceTimer);
+  $('practice').hidden = true; $('setup').hidden = false; };
+$('prev').onclick = () => idx > 0 && loadSentence(idx - 1);
+$('next').onclick = () => idx < sentences.length - 1 && loadSentence(idx + 1);
+$('listen').onclick = () => playSentence();
+$('speak').onclick = () => listening ? (stopListening(), status('')) : startListening();
+$('hint').onclick = () => {
+  const start = matched.indexOf(false);
+  if (start < 0) return;
+  stopListening();
+  status('💡 Next words...');
+  speak(words.slice(start, start + 3).join(' '), () => startListening());
+};
+$('memory').onchange = () => render();
+
+$('para').value = localStorage.getItem('speech-para') || '';
+$('lang').value = localStorage.getItem('speech-lang') || 'en-IN';
+if (!SR) $('warn').textContent = '⚠️ This browser can’t listen to speech. Please open this page in Google Chrome or Microsoft Edge.';
+speechSynthesis.getVoices();
+</script>
+</body>
+</html>
