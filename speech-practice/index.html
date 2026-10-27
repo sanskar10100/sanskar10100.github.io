@@ -48,6 +48,12 @@
       </select>
     </label>
   </div>
+  <details>
+    <summary>Pronunciation fixes (if the voice says a word wrong)</summary>
+    <p>One per line: <code>words in speech = how the voice should say it</code>. Only changes the voice, not the text on screen.</p>
+    <textarea id="fixes" style="height:100px"></textarea>
+    <button id="testFixes">🔊 Test fixes</button>
+  </details>
   <button class="big" id="start">Start practising ▶</button>
   <p id="warn"></p>
 </div>
@@ -77,7 +83,8 @@ const $ = id => document.getElementById(id);
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 let sentences = [], idx = 0;
-let words = [], keys = [], offsets = [], matched = [];
+let words = [], keys = [], spoken = [], offsets = [], matched = [];
+const DEFAULT_FIXES = 'our lives = our lyves\nyour lives = your lyves\ntheir lives = their lyves';
 let rec = null, listening = false, manualStop = false, advanceTimer = null;
 
 const norm = w => w.toLowerCase().normalize('NFC').replace(/[^\p{L}\p{M}\p{N}]/gu, '');
@@ -105,6 +112,29 @@ function similar(a, b) {
   return false;
 }
 
+function parseFixes() {
+  return $('fixes').value.split('\n').map(l => l.split('=')).filter(p => p.length === 2)
+    .map(([from, to]) => ({ from: from.trim().split(/\s+/).map(norm).filter(Boolean), to: to.trim().split(/\s+/) }))
+    .filter(r => r.from.length && r.to[0]);
+}
+
+// What the voice should say for each displayed word, after pronunciation fixes.
+function spokenForms() {
+  const out = words.slice();
+  for (const r of parseFixes()) {
+    for (let i = 0; i + r.from.length <= keys.length; i++) {
+      if (!r.from.every((f, j) => keys[i + j] === f)) continue;
+      r.from.forEach((_, j) => {
+        const trailing = words[i + j].match(/[^\p{L}\p{M}\p{N}]*$/u)[0];
+        const sameCount = r.to.length === r.from.length;
+        out[i + j] = sameCount ? r.to[j] + trailing
+          : j === 0 ? r.to.join(' ') : j === r.from.length - 1 ? trailing : '';
+      });
+    }
+  }
+  return out;
+}
+
 // ---------- sentence display ----------
 function loadSentence(i) {
   clearTimeout(advanceTimer);
@@ -114,9 +144,10 @@ function loadSentence(i) {
   const s = sentences[idx];
   words = s.split(' ');
   keys = words.map(norm);
+  spoken = spokenForms();
   offsets = [];
   let pos = 0;
-  for (const w of words) { offsets.push(pos); pos += w.length + 1; }
+  for (const w of spoken) { offsets.push(pos); pos += w.length + 1; }
   matched = keys.map(k => k === '');   // bare punctuation counts as already said
   $('heard').textContent = '';
   $('progress').textContent = `Sentence ${idx + 1} of ${sentences.length}`;
@@ -134,8 +165,8 @@ function render(readingIdx = -1) {
     span.className = 'w' + (matched[i] ? ' ok' : '') + (i === readingIdx ? ' reading' : '')
       + (memory && !matched[i] && i !== readingIdx ? ' hidden' : '');
     span.textContent = w;
-    span.title = 'Click to mark as said';
-    span.onclick = () => { matched[i] = true; if (rec) base[i] = true; render(); if (isDone()) success(); };
+    span.title = 'Click to hear this word';
+    span.onclick = () => sayWord(i);
     $('sentence').appendChild(span);
   });
 }
@@ -170,7 +201,13 @@ function speak(text, onDone, highlight = false) {
 function playSentence() {
   stopListening();
   status('👂 Listen...');
-  speak(sentences[idx], () => startListening(), true);
+  speak(spoken.join(' '), () => startListening(), true);
+}
+
+function sayWord(i) {
+  const wasListening = listening;
+  stopListening();   // so the mic doesn't hear the voice
+  speak(spoken[i] || words[i], () => wasListening && startListening());
 }
 
 // ---------- speech recognition ----------
@@ -263,6 +300,7 @@ $('start').onclick = () => {
   if (!sentences.length) { $('warn').textContent = 'Paste the speech first.'; return; }
   localStorage.setItem('speech-para', $('para').value);
   localStorage.setItem('speech-lang', lang());
+  localStorage.setItem('speech-fixes', $('fixes').value);
   $('setup').hidden = true;
   $('practice').hidden = false;
   loadSentence(0);
@@ -278,12 +316,14 @@ $('hint').onclick = () => {
   if (start < 0) return;
   stopListening();
   status('💡 Next words...');
-  speak(words.slice(start, start + 3).join(' '), () => startListening());
+  speak(spoken.slice(start, start + 3).join(' '), () => startListening());
 };
+$('testFixes').onclick = () => speak(parseFixes().map(r => r.to.join(' ')).join('. '));
 $('memory').onchange = () => render();
 
 $('para').value = localStorage.getItem('speech-para') || '';
 $('lang').value = localStorage.getItem('speech-lang') || 'en-IN';
+$('fixes').value = localStorage.getItem('speech-fixes') ?? DEFAULT_FIXES;
 if (!SR) $('warn').textContent = '⚠️ This browser can’t listen to speech. Please open this page in Google Chrome or Microsoft Edge.';
 speechSynthesis.getVoices();
 </script>
